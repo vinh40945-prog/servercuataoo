@@ -5,25 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cloudy PikaMC | Quick Access</title>
     <style>
+        /* Reset cơ bản để tránh thanh cuộn rác */
+        * {
+            box-sizing: border-box;
+        }
+        
         body {
             margin: 0;
             padding: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #0a0a0a);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
             color: #fff;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            overflow: hidden;
+            min-height: 100vh;
+            /* Background mặc định cho PC (bg2.jpg) */
+            background: url('bg2.jpg') no-repeat center center fixed;
+            background-size: cover;
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        /* Lớp phủ mờ để đảm bảo text luôn đọc được dù ảnh nền có sáng đi nữa */
+        .overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 0;
         }
 
         .container {
@@ -32,16 +38,21 @@
             z-index: 10;
             flex-wrap: wrap;
             justify-content: center;
+            padding: 20px;
+            width: 100%;
+            max-width: 900px;
         }
 
+        /* Thẻ Glassmorphism */
         .card {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 20px;
             padding: 40px 30px;
-            width: 320px;
+            width: 100%;
+            max-width: 350px;
             text-align: center;
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
             transition: all 0.4s ease;
@@ -50,8 +61,8 @@
 
         .card:hover {
             transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 0 30px rgba(0, 229, 255, 0.4);
-            border: 1px solid rgba(0, 229, 255, 0.3);
+            box-shadow: 0 0 30px rgba(0, 229, 255, 0.3);
+            border: 1px solid rgba(0, 229, 255, 0.4);
         }
 
         .card:nth-child(2) {
@@ -77,7 +88,7 @@
         .info {
             margin: 20px 0;
             font-size: 1.1rem;
-            color: #dcdcdc;
+            color: #eaeaea;
             line-height: 1.6;
         }
 
@@ -86,68 +97,72 @@
             font-weight: bold;
         }
 
+        /* Nút Liquid Glass cực chất của cậu đây */
         .btn {
             display: inline-block;
             margin-top: 20px;
-            padding: 12px 25px;
-            background: linear-gradient(90deg, #00c6ff 0%, #0072ff 100%);
-            border: none;
-            border-radius: 25px;
+            padding: 15px 25px;
+            background: rgba(255, 255, 255, 0.1); /* Nền mờ */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            /* Viền sáng phía trên và bên trái tạo cảm giác nổi 3D */
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-top: 1px solid rgba(255, 255, 255, 0.5);
+            border-left: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 30px;
             color: white;
             font-size: 1rem;
             font-weight: bold;
             text-decoration: none;
             cursor: pointer;
-            transition: 0.3s;
-            position: relative;
-            overflow: hidden;
-            width: 80%;
-        }
-
-        .btn::after {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 50%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
-            transform: skewX(-20deg);
-            transition: 0.5s;
-        }
-
-        .btn:hover::after {
-            left: 150%;
+            transition: all 0.3s ease;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.1), inset 1px 1px 3px rgba(255,255,255,0.3);
+            width: 90%;
         }
 
         .btn:hover {
-            box-shadow: 0 0 20px rgba(0, 198, 255, 0.6);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3), inset 1px 1px 5px rgba(255,255,255,0.5);
             transform: scale(1.05);
         }
-        .particles {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none;
-            background-image: 
-                radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)),
-                radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)),
-                radial-gradient(2px 2px at 50px 160px, #ddd, rgba(0,0,0,0)),
-                radial-gradient(2px 2px at 90px 40px, #fff, rgba(0,0,0,0)),
-                radial-gradient(2px 2px at 130px 80px, #fff, rgba(0,0,0,0));
-            background-repeat: repeat;
-            background-size: 200px 200px;
-            opacity: 0.3;
-            animation: moveStars 60s linear infinite;
+
+        .btn:active {
+            transform: scale(0.95);
         }
 
-        @keyframes moveStars {
-            from { background-position: 0 0; }
-            to { background-position: -10000px 5000px; }
+        /* ========================================= */
+        /* MEDIA QUERY: DÀNH RIÊNG CHO ĐIỆN THOẠI    */
+        /* ========================================= */
+        @media screen and (max-width: 768px) {
+            body {
+                /* Background cho điện thoại (bg1.jpg) */
+                background: url('bg1.jpg') no-repeat center center fixed;
+                background-size: cover;
+                padding: 40px 0;
+                align-items: flex-start; /* Cho thẻ tự đẩy xuống chứ không bị kẹp giữa */
+            }
+
+            .container {
+                flex-direction: column; /* Xếp dọc thẻ */
+                align-items: center;
+                gap: 30px;
+            }
+
+            .card {
+                width: 90%;
+                padding: 30px 20px;
+                animation: none; /* Tắt hiệu ứng float để điện thoại đỡ lác */
+            }
+            
+            .card:hover {
+                transform: translateY(-5px); /* Hover nhẹ nhàng thôi */
+            }
         }
     </style>
 </head>
 <body>
-    <div class="particles"></div>
+    <div class="overlay"></div>
     <div class="container">
-        <!-- Thẻ Bedrock -->
         <div class="card">
             <h2>Bedrock</h2>
             <div class="info">
@@ -155,23 +170,22 @@
                 <p>Port: <span>25173</span></p>
                 <p>Version: <span>1.21.130 > 26.20</span></p>
             </div>
-            <a href="minecraft://?addExternalServer=sever%20cua%20vinh%20dep%20trai%20nhat%20the%20gioi|cloudy.pikamc.vn:25173" class="btn">Vào Game Ngay</a>
+            <a href="minecraft://?addExternalServer=sever%20cua%20vinh%20dep%20trai%20nhat%20the%20gioi|cloudy.pikamc.vn:25173" class="btn">Mở đi nhìn gì ní</a>
         </div>
 
-        <!-- Thẻ Java -->
         <div class="card">
             <h2>Java Edition</h2>
             <div class="info">
                 <p>IP: <span>cloudy.pikamc.vn:25147</span></p>
-                <p>Version: <span>Mọi phiên bản</span></p>
+                <p>Version: <span>Bản nào chả đc Baka!!</span></p>
             </div>
-            <button class="btn" onclick="copyIP('cloudy.pikamc.vn:25147')">Copy IP Mày Đay</button>
+            <button class="btn" onclick="copyIP('cloudy.pikamc.vn:25147')">Chơi java thì copy đi nhìn cc</button>
         </div>
     </div>
     <script>
         function copyIP(ip) {
             navigator.clipboard.writeText(ip).then(() => {
-                alert("Coppy IP: " + ip + " rồi đấy cu! Vô game mà nhập đi thằng lồn");
+                alert("Copy IP: " + ip + " rồi đấy cu! Vô game mà nhập đi thằng lồn");
             }).catch(err => {
                 alert("Copy đéo được! Nhập tay đi thằng căc");
             });
