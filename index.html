@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloudy PikaMC | Quick Access</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #0a0a0a);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            display: flex;
+            gap: 40px;
+            z-index: 10;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px 30px;
+            width: 320px;
+            text-align: center;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            transition: all 0.4s ease;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 0 30px rgba(0, 229, 255, 0.4);
+            border: 1px solid rgba(0, 229, 255, 0.3);
+        }
+
+        .card:nth-child(2) {
+            animation-delay: 1.5s;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        h2 {
+            color: #00e5ff;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+        }
+
+        .info {
+            margin: 20px 0;
+            font-size: 1.1rem;
+            color: #dcdcdc;
+            line-height: 1.6;
+        }
+
+        .info span {
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 25px;
+            background: linear-gradient(90deg, #00c6ff 0%, #0072ff 100%);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+            width: 80%;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+            transform: skewX(-20deg);
+            transition: 0.5s;
+        }
+
+        .btn:hover::after {
+            left: 150%;
+        }
+
+        .btn:hover {
+            box-shadow: 0 0 20px rgba(0, 198, 255, 0.6);
+            transform: scale(1.05);
+        }
+        .particles {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 50px 160px, #ddd, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 90px 40px, #fff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 130px 80px, #fff, rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            opacity: 0.3;
+            animation: moveStars 60s linear infinite;
+        }
+
+        @keyframes moveStars {
+            from { background-position: 0 0; }
+            to { background-position: -10000px 5000px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles"></div>
+    <div class="container">
+        <!-- Thẻ Bedrock -->
+        <div class="card">
+            <h2>Bedrock</h2>
+            <div class="info">
+                <p>IP: <span>cloudy.pikamc.vn</span></p>
+                <p>Port: <span>25173</span></p>
+                <p>Version: <span>1.21.130 > 26.20</span></p>
+            </div>
+            <a href="minecraft://?addExternalServer=sever%20cua%20vinh%20dep%20trai%20nhat%20the%20gioi|cloudy.pikamc.vn:25173" class="btn">Vào Game Ngay</a>
+        </div>
+
+        <!-- Thẻ Java -->
+        <div class="card">
+            <h2>Java Edition</h2>
+            <div class="info">
+                <p>IP: <span>cloudy.pikamc.vn:25147</span></p>
+                <p>Version: <span>Mọi phiên bản</span></p>
+            </div>
+            <button class="btn" onclick="copyIP('cloudy.pikamc.vn:25147')">Copy IP Mày Đay</button>
+        </div>
+    </div>
+    <script>
+        function copyIP(ip) {
+            navigator.clipboard.writeText(ip).then(() => {
+                alert("Coppy IP: " + ip + " rồi đấy cu! Vô game mà nhập đi thằng lồn");
+            }).catch(err => {
+                alert("Copy đéo được! Nhập tay đi thằng căc");
+            });
+        }
+    </script>
+</body>
+</html>
