@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cloudy PikaMC | Quick Access</title>
     <style>
-        /* Reset cơ bản để tránh thanh cuộn rác */
         * {
             box-sizing: border-box;
         }
@@ -19,17 +18,24 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            /* Background mặc định cho PC (bg2.jpg) */
             background: url('bg2.jpg') no-repeat center center fixed;
             background-size: cover;
         }
 
-        /* Lớp phủ mờ để đảm bảo text luôn đọc được dù ảnh nền có sáng đi nữa */
+        .bg-video {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            z-index: -2;
+        }
+
         .overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.4);
-            z-index: 0;
+            z-index: -1;
         }
 
         .container {
@@ -43,7 +49,6 @@
             max-width: 900px;
         }
 
-        /* Thẻ Glassmorphism */
         .card {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(15px);
@@ -97,15 +102,13 @@
             font-weight: bold;
         }
 
-        /* Nút Liquid Glass cực chất của cậu đây */
         .btn {
             display: inline-block;
             margin-top: 20px;
             padding: 15px 25px;
-            background: rgba(255, 255, 255, 0.1); /* Nền mờ */
+            background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            /* Viền sáng phía trên và bên trái tạo cảm giác nổi 3D */
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-top: 1px solid rgba(255, 255, 255, 0.5);
             border-left: 1px solid rgba(255, 255, 255, 0.5);
@@ -126,24 +129,47 @@
             transform: scale(1.05);
         }
 
-        .btn:active {
-            transform: scale(0.95);
+        .audio-control {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-top: 1px solid rgba(255, 255, 255, 0.5);
+            border-left: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            z-index: 100;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2), inset 1px 1px 3px rgba(255,255,255,0.3);
+            transition: all 0.3s ease;
         }
 
-        /* ========================================= */
-        /* MEDIA QUERY: DÀNH RIÊNG CHO ĐIỆN THOẠI    */
-        /* ========================================= */
         @media screen and (max-width: 768px) {
             body {
-                /* Background cho điện thoại (bg1.jpg) */
-                background: url('bg1.jpg') no-repeat center center fixed;
-                background-size: cover;
+                background: #000;
                 padding: 40px 0;
-                align-items: flex-start; /* Cho thẻ tự đẩy xuống chứ không bị kẹp giữa */
+                align-items: flex-start;
+            }
+
+            .bg-video {
+                display: block;
+            }
+
+            .audio-control {
+                display: flex;
+                justify-content: center;
+                align-items: center;
             }
 
             .container {
-                flex-direction: column; /* Xếp dọc thẻ */
+                flex-direction: column;
                 align-items: center;
                 gap: 30px;
             }
@@ -151,17 +177,24 @@
             .card {
                 width: 90%;
                 padding: 30px 20px;
-                animation: none; /* Tắt hiệu ứng float để điện thoại đỡ lác */
+                animation: none;
             }
             
             .card:hover {
-                transform: translateY(-5px); /* Hover nhẹ nhàng thôi */
+                transform: translateY(-5px);
             }
         }
     </style>
 </head>
 <body>
+    <video id="myVideo" class="bg-video" loop playsinline autoplay muted>
+        <source src="BGdt.mp4" type="video/mp4">
+    </video>
+
     <div class="overlay"></div>
+
+    <button id="muteBtn" class="audio-control">🔊</button>
+
     <div class="container">
         <div class="card">
             <h2>Bedrock</h2>
@@ -182,7 +215,41 @@
             <button class="btn" onclick="copyIP('cloudy.pikamc.vn:25147')">Chơi java thì copy đi nhìn cc</button>
         </div>
     </div>
+
     <script>
+        const video = document.getElementById('myVideo');
+        const muteBtn = document.getElementById('muteBtn');
+
+        video.volume = 0.15;
+
+        function autoUnmute() {
+            video.muted = false;
+            muteBtn.innerHTML = "🔊";
+            document.removeEventListener('click', autoUnmute);
+            document.removeEventListener('touchstart', autoUnmute);
+        }
+        document.addEventListener('click', autoUnmute);
+        document.addEventListener('touchstart', autoUnmute);
+
+        muteBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (video.muted) {
+                video.muted = false;
+                muteBtn.innerHTML = "🔊";
+            } else {
+                video.muted = true;
+                muteBtn.innerHTML = "🔇";
+            }
+        });
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                video.pause();
+            } else {
+                video.play().catch(err => console.log("Chờ tương tác để phát lại..."));
+            }
+        });
+
         function copyIP(ip) {
             navigator.clipboard.writeText(ip).then(() => {
                 alert("Copy IP: " + ip + " rồi đấy cu! Vô game mà nhập đi thằng lồn");
